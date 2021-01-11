@@ -46,14 +46,3 @@ def get_current_user(
     return user
 
 
-# 管理员权限
-def get_current_superuser(
-    current_user: models.User = Depends(get_current_user),
-) -> models.User:
-    if not current_user.is_super:
-        raise HTTPException(
-            status_code=400, detail="需要管理员权限."
-        )
-    return current_user
-
-

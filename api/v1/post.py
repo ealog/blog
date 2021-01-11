@@ -42,21 +42,20 @@ def post_add(
 @router.get("/posts", summary="文章列表", response_model=List[schemas.post.Post])
 def post_list(
         db: Session = Depends(deps.get_db),
-        user_token: models.User = Depends(deps.get_current_user)
 ):
-    return db.query(models.Post).filter(models.Post.user_id == user_token.id).all()
+    return db.query(models.Post).all()
 
 
-@router.get("/posts/{post_id}", summary="文章详情", response_model=schemas.post.PostInDBBase)
+@router.get("/posts/{post_id}", summary="文章详情", response_model=schemas.post.Post)
 def post_info(
         post_id: int,
         db: Session = Depends(deps.get_db),
-        user_token: models.User = Depends(deps.get_current_user)
 ):
     result = db.query(models.Post).get(post_id)
     if not result:
         raise HTTPException(status_code=404, detail="文章不存在.")
     return result
+
 
 @router.put("/posts/{post_id}", summary="文章修改")
 def post_update(

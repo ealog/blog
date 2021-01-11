@@ -50,16 +50,7 @@ def category_add(
 
 @router.get("/category", summary="获取分类列表", response_model=List[schemas.category.Category])
 def category_list(
-        db: Session = Depends(deps.get_db),
-        user_token: models.User = Depends(deps.get_current_user)
-):
-    return db.query(models.Category).filter(models.Category.user_id == user_token.id).all()
-
-
-@router.get("/plant/category", summary="平台分类列表", response_model=List[schemas.category.PlantCategory])
-def plant_category(
-        db: Session = Depends(deps.get_db),
-        super_token: models.User = Depends(deps.get_current_superuser)
+        db: Session = Depends(deps.get_db)
 ):
     return db.query(models.Category).all()
 

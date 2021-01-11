@@ -11,7 +11,6 @@
 @desc:
 关于用户模型的-路由处理
 """
-from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Body
 from fastapi.security import OAuth2PasswordRequestForm
@@ -57,24 +56,6 @@ def register_user(
     return user_obj
 
 
-@router.get("/users", summary="平台用户列表", response_model=List[schemas.user.User])
-def get_users(
-        db: Session = Depends(deps.get_db),
-        super_token: models.User = Depends(deps.get_current_superuser)
-):
-    """需要管理员账号"""
-    return db.query(models.User).all()
-
-
-@router.get("/users/{user_id}", summary="管理员查看用户个人信息", response_model=schemas.user.User)
-def get_user(
-        user_id: int,
-        db: Session = Depends(deps.get_db),
-        super_token: models.User = Depends(deps.get_current_superuser)
-):
-    return db.query(models.User).get(user_id)
-
-
 @router.put("/users/", summary="个人信息修改", response_model=schemas.user.User)
 def update_user(
         user: schemas.user.UserUpdate = Body(...),
@@ -86,31 +67,3 @@ def update_user(
         db.commit()
         user = user_up.first()
         return user
-
-
-@router.put("/users/{user_id}", summary="管理员修改用户信息", response_model=schemas.user.User)
-def update_user_id(
-        user_id: int,
-        user: schemas.user.UserUpdate,
-        db: Session = Depends(deps.get_db),
-        super_token: models.User = Depends(deps.get_current_superuser)
-):
-    user_up = db.query(models.User).filter(models.User.id == user_id)
-    if user_up.update({"username": user.username, "password_hash": security.get_password_hash(user.password)}):
-        db.commit()
-        user = user_up.first()
-        return user
-
-
-@router.delete("/users/{user_id}", summary="删除用户")
-def delete_user(
-        user_id: int,
-        db: Session = Depends(deps.get_db),
-        user_token: models.User = Depends(deps.get_current_superuser)
-):
-    user = db.query(models.User).get(user_id)
-    if user:
-        db.delete(user)
-        db.commit()
-        return {"detail": "删除成功!"}
-    raise HTTPException(status_code=404, detail="用户不存在")
