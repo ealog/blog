@@ -13,11 +13,10 @@
 """
 
 
-from models import Base, Column, Integer, String, Boolean
+from models import Base, Column, Integer, String
 
 
 class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(20), comment="邮箱账号", nullable=False)
     password_hash = Column(String(128), comment="密码", nullable=False)
-    is_super = Column(Boolean, default=False, comment="管理员")

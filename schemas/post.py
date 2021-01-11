@@ -31,17 +31,9 @@ class PostUpdate(PostBase):
     pass
 
 
-class PostInDBBase(PostBase):
+class Post(PostCreate):
     """数据库user表基础模型，并且与model中的user相关联"""
     id: Optional[int] = None
 
     class Config:
         orm_mode = True
-
-
-class Post(PostInDBBase):
-    pass
-
-
-class PlantPost(PostInDBBase):
-    user_id: int

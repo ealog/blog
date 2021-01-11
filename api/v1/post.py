@@ -23,6 +23,24 @@ import db as models
 router = APIRouter()
 
 
+@router.get("/posts", summary="文章列表", response_model=List[schemas.post.Post])
+def post_list(
+        db: Session = Depends(deps.get_db),
+):
+    return db.query(models.Post).all()
+
+
+@router.get("/posts/{post_id}", summary="文章详情", response_model=schemas.post.Post)
+def post_info(
+        post_id: int,
+        db: Session = Depends(deps.get_db),
+):
+    result = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if not result:
+        raise HTTPException(status_code=404, detail="文章不存在.")
+    return result
+
+
 @router.post("/post", summary="新增文章", response_model=schemas.post.Post)
 def post_add(
         post: schemas.post.PostCreate,
@@ -39,28 +57,18 @@ def post_add(
     return post_obj
 
 
-@router.get("/posts", summary="文章列表", response_model=List[schemas.post.Post])
-def post_list(
-        db: Session = Depends(deps.get_db),
-):
-    return db.query(models.Post).all()
-
-
-@router.get("/posts/{post_id}", summary="文章详情", response_model=schemas.post.Post)
-def post_info(
-        post_id: int,
-        db: Session = Depends(deps.get_db),
-):
-    result = db.query(models.Post).get(post_id)
-    if not result:
-        raise HTTPException(status_code=404, detail="文章不存在.")
-    return result
-
-
 @router.put("/posts/{post_id}", summary="文章修改")
 def post_update(
+        post_id: int,
         post: schemas.post.PostCreate,
         db: Session = Depends(deps.get_db),
-        user_token: models.User = Depends(deps.get_current_user)
+        # user_token: models.User = Depends(deps.get_current_user)
 ):
-    pass
+    post_up = db.query(models.Post).filter(models.Post.id == post_id)
+    if post_up:
+        post = models.Post(**post.dict())
+        db.add(post)
+        db.commit()
+        db.refresh(post)
+        return post
+    raise HTTPException(status_code=404, detail="文章不存在.")

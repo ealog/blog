@@ -32,9 +32,8 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
-# 数据库操作
-
-class UserInDBBase(UserBase):
+# Additional properties to return via API
+class User(UserBase):
     """数据库user表基础模型，并且与model中的user相关联"""
     id: Optional[int] = None
 
@@ -42,18 +41,8 @@ class UserInDBBase(UserBase):
         orm_mode = True
 
 
-# Additional properties to return via API
-class User(UserInDBBase):
-    pass
-
-
-class UserToken(UserInDBBase):
+class UserToken(User):
     """通过API返回的属性"""
     access_token: str
     token_type: str
 
-
-# Additional properties stored in DB
-class UserInDB(UserInDBBase):
-    """写入数据库时用的属性"""
-    password_hash: str
