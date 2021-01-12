@@ -55,3 +55,17 @@ def update_link(
         db.commit()
         return link_obj.first()
     raise HTTPException(status_code=404, detail="友链不存在.")
+
+
+@router.delete("/links/{link_id}", summary="删除友链")
+def delete_link(
+        link_id: int,
+        db: Session = Depends(deps.get_db),
+        user_token: models.User = Depends(deps.get_current_user)
+):
+    result = db.query(models.Links).get(link_id)
+    if result:
+        db.delete(result)
+        db.commit()
+        return {"detail": "删除成功!"}
+    raise HTTPException(status_code=404, detail="友链不存在.")
