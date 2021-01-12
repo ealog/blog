@@ -30,17 +30,14 @@ def category_add(
         db: Session = Depends(deps.get_db),
         user_token: models.User = Depends(deps.get_current_user)
 ):
-    # 获取当前用户登录的id
-    user_id = user_token.id
     result = db.query(models.Category).filter(
-        and_(models.Category.name == category.name, models.Category.user_id == user_id)
+        and_(models.Category.name == category.name)
     ).first()
 
     if result:
         raise HTTPException(status_code=404, detail="分类名称已存在")
     category_obj = models.Category(
-        name=category.name,
-        user_id=user_id
+        name=category.name
     )
     db.add(category_obj)
     db.commit()
@@ -64,9 +61,7 @@ def update_category(
 ):
     if not db.query(models.Category).get(category_id):
         raise HTTPException(status_code=404, detail="分类不存在")
-    category_up = db.query(models.Category).filter(
-        and_(models.Category.id == category_id, models.Category.user_id == user_token.id)
-    )
+    category_up = db.query(models.Category).filter(models.Category.id == category_id)
     if category_up.update({"name": category.name}):
         db.commit()
         category = category_up.first()

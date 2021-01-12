@@ -18,3 +18,5 @@ from models.post import Post
 from models.user import User
 from models.comment import Comment
 from models.category import Category
+from models.options import Options
+from models.links import Links

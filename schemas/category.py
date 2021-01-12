@@ -46,6 +46,3 @@ class CategoryInDBBase(CategoryBase):
 class Category(CategoryInDBBase):
     pass
 
-
-class PlantCategory(CategoryInDBBase):
-    user_id: int

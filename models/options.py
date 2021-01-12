@@ -11,8 +11,11 @@
 @desc:
 设置表
 """
-from models import Base
+from models import Base, Column, Integer, String, Text
 
 
 class Options(Base):
-    pass
+    id = Column(Integer, index=True, primary_key=True)
+    blog_title = Column(String(50), comment="博客标题")
+    blog_sub_title = Column(String(100), comment="博客副标题")
+    about = Column(Text, comment="关于")

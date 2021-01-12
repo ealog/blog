@@ -12,7 +12,7 @@
 关于用户模型的-路由处理
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, HTTPException, Body, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -24,7 +24,7 @@ import schemas.user
 router = APIRouter()
 
 
-@router.post("/login", summary="用户登录", response_model=schemas.user.UserToken)
+@router.post("/user/login", summary="用户登录", response_model=schemas.user.UserToken)
 def user_login(
         db: Session = Depends(deps.get_db),
         form_data: OAuth2PasswordRequestForm = Depends()
@@ -37,7 +37,7 @@ def user_login(
     return user
 
 
-@router.post("/users", summary="注册", response_model=schemas.user.User)
+@router.post("/user/register", summary="注册", response_model=schemas.user.User)
 def register_user(
         user: schemas.user.UserCreate,
         db: Session = Depends(deps.get_db)
@@ -47,8 +47,7 @@ def register_user(
         raise HTTPException(status_code=400, detail="用户已存在，请重试!")
     user_obj = models.User(
         username=user.username,
-        password_hash=security.get_password_hash(user.password),
-        is_super=user.is_super
+        password_hash=security.get_password_hash(user.password)
     )
     db.add(user_obj)
     db.commit()
@@ -56,14 +55,13 @@ def register_user(
     return user_obj
 
 
-@router.put("/users/", summary="个人信息修改", response_model=schemas.user.User)
+@router.put("/user/password", summary="修改密码", response_model=schemas.user.User)
 def update_user(
-        user: schemas.user.UserUpdate = Body(...),
+        password: str = Form(..., min_length=6, max_length=12),
         db: Session = Depends(deps.get_db),
         user_token: models.User = Depends(deps.get_current_user)
 ):
     user_up = db.query(models.User).filter(models.User.id == user_token.id)
-    if user_up.update({"username": user.username, "password_hash": security.get_password_hash(user.password)}):
+    if user_up.update({"password_hash": security.get_password_hash(password)}):
         db.commit()
-        user = user_up.first()
-        return user
+        return user_up.first()

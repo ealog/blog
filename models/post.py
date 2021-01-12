@@ -20,4 +20,3 @@ class Post(Base):
     body = Column(Text, comment="文章内容")
     is_show = Column(Boolean, default=True, comment="是否显示")
     category_id = Column(Integer, comment="分类")
-    user_id = Column(Integer, comment="作者")

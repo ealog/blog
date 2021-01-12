@@ -22,7 +22,7 @@ from core.security import analysis_token
 from db.session import SessionLocal
 
 user_oauth = OAuth2PasswordBearer(
-    tokenUrl="/login"
+    tokenUrl="/user/login"
 )
 
 

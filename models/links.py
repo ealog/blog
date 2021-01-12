@@ -11,3 +11,11 @@
 @desc:
 友链表
 """
+from models import Base, Column, Integer, String
+
+
+class Links(Base):
+    id = Column(Integer, index=True, primary_key=True)
+    name = Column(String(60), comment="名称")
+    url = Column(String(100), comment="链接地址")
+

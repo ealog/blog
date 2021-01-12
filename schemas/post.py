@@ -11,7 +11,7 @@
 @desc:
 文章列表
 """
-
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -27,8 +27,10 @@ class PostCreate(PostBase):
     category_id: int
 
 
-class PostUpdate(PostBase):
-    pass
+class PostList(PostBase):
+    id: int
+    create_at: datetime
+    update_at: datetime
 
 
 class Post(PostCreate):

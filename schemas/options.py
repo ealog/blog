@@ -2,14 +2,14 @@
 # _*_ coding: utf-8 _*_
 """
 @project: blog(FastAPI)
-@file: user.py
+@file: options.py
 @author: zy7y
-@time: 2021/1/9
+@time: 2021/1/12
 @site: https://cnblogs.com/zy7y
 @github: https://github.com/zy7y
 @gitee: https://gitee.com/zy7y
 @desc:
-
+设置
 """
 from datetime import datetime
 from typing import Optional
@@ -17,22 +17,14 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr
 
 
-class UserBase(BaseModel):
-    username: Optional[EmailStr] = None
-
-
-# Properties to receive via API on creation
-class UserCreate(UserBase):
-    password: str
-
-
-# Properties to receive via API on update
-class UserUpdate(UserBase):
-    password: Optional[str] = None
+class OptionsBase(BaseModel):
+    blog_title: str
+    blog_sub_title: str
+    about: str
 
 
 # Additional properties to return via API
-class User(UserBase):
+class Options(OptionsBase):
     """数据库user表基础模型，并且与model中的user相关联"""
     id: Optional[int] = None
     create_at: datetime
@@ -40,10 +32,3 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
-
-
-class UserToken(User):
-    """通过API返回的属性"""
-    access_token: str
-    token_type: str
-

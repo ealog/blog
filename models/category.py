@@ -18,4 +18,3 @@ class Category(Base):
     """分类表"""
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(30), comment="分类名称")
-    user_id = Column(Integer, index=True, comment="所属用户")
