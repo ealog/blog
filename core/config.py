@@ -20,13 +20,6 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     """配置类"""
 
-    API_V1_STR = "blog/api/v1"
-    # 文档设置
-    TITLE: str = "接口文档"
-    DOCS_URL: str = f"{API_V1_STR}/docs"
-    DESCRIPTION: str = """123
-    """
-
     # token相关
     ALGORITHM: str = "HS256"  # 加密算法
     SECRET_KEY: str = secrets.token_urlsafe(32)  # 随机生成的base64位字符串

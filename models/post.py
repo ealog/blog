@@ -20,3 +20,4 @@ class Post(Base):
     body = Column(Text, comment="文章内容")
     is_show = Column(Boolean, default=True, comment="是否显示")
     category_id = Column(Integer, comment="分类")
+    count = Column(Integer, default=0, comment="阅读量")

@@ -36,6 +36,7 @@ class PostList(PostBase):
 class Post(PostCreate):
     """数据库user表基础模型，并且与model中的user相关联"""
     id: Optional[int] = None
+    count: int
 
     class Config:
         orm_mode = True

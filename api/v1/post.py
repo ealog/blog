@@ -40,6 +40,9 @@ def post_info(
     result = db.query(models.Post).filter(models.Post.id == post_id).first()
     if not result:
         raise HTTPException(status_code=404, detail="文章不存在.")
+    result.count += 1
+    db.commit()
+    db.refresh(result)
     return result
 
 
