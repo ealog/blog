@@ -81,3 +81,15 @@ def delete_category(
         db.commit()
         return {"detail": "删除成功!"}
     raise HTTPException(status_code=404, detail="分类不存在.")
+
+
+@router.get("/category/{category_id}/posts", summary="获取分类下的文章")
+def category_posts(
+    category_id: int,
+    db: Session = Depends(deps.get_db)
+):
+    # result = db.query(models.Category).get(category_id)
+    # if result:
+    #     return db.query(models.Post).filter(models.Post.category_id == result.id).all()
+    # raise HTTPException(status_code=404, detail="分类不存在.")
+    return db.query(models.Post).filter(models.Post.category_id == category_id).all()

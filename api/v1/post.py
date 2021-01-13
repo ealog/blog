@@ -25,9 +25,11 @@ router = APIRouter()
 
 @router.get("/posts", summary="文章列表", response_model=List[schemas.post.PostList])
 def post_list(
+        skip: int = 0,
+        limit: int = 5,
         db: Session = Depends(deps.get_db),
 ):
-    return db.query(models.Post).all()
+    return db.query(models.Post).offset(skip).limit(limit).all()
 
 
 @router.get("/posts/{post_id}", summary="文章详情", response_model=schemas.post.Post)
