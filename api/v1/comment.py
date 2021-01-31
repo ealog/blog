@@ -2,7 +2,7 @@
 # _*_ coding: utf-8 _*_
 """
 @project: blog(FastAPI)
-@file: comment.py
+@file: review.py
 @author: zy7y
 @time: 2021/1/10
 @site: https://cnblogs.com/zy7y
@@ -18,12 +18,12 @@ from sqlalchemy.orm import Session
 
 from core import deps
 import db as models
-import schemas.comment
+import schemas.review
 
 router = APIRouter()
 
 
-@router.get("/comments", summary="获取所有评论列表", response_model=List[schemas.comment.Comment])
+@router.get("/comments", summary="获取所有评论列表", response_model=List[schemas.review.Comment])
 def get_comments(
         db: Session = Depends(deps.get_db)
 ):
@@ -32,7 +32,7 @@ def get_comments(
 
 @router.post("/comment", summary="新增评论")
 def add_comment(
-        comment: schemas.comment.CommentBase,
+        comment: schemas.review.CommentBase,
         db: Session = Depends(deps.get_db)
 ):
     comment_obj = models.Comment(**comment.dict())

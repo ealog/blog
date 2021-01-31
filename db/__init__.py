@@ -15,8 +15,6 @@
 # 导入所有用到的模型 方便alembic使用
 from models import Base
 from models.post import Post
-from models.user import User
-from models.comment import Comment
+from models.admin import Admin
+from models.review import Review
 from models.category import Category
-from models.options import Options
-from models.links import Links

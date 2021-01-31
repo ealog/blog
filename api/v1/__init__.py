@@ -9,5 +9,19 @@
 @github: https://github.com/zy7y
 @gitee: https://gitee.com/zy7y
 @desc:
-
+汇总路由
 """
+
+
+from fastapi import APIRouter
+
+from api.v1.admin import admin_router
+from api.v1.auth import auth_router
+from api.v1.blog import blog_router
+
+router = APIRouter(prefix="/v1")
+
+
+router.include_router(blog_router)
+router.include_router(auth_router)
+router.include_router(admin_router)

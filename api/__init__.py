@@ -11,6 +11,34 @@
 @desc:
 蓝图模式，实际api管理
 """
+from fastapi import FastAPI, Request
+from tools.logger import logger
+from starlette.middleware.cors import CORSMiddleware
 
-def creat_app():
-    pass
+from api.v1 import router
+from core.config import setting
+
+
+def create_app():
+    app = FastAPI()
+    app.include_router(router)
+
+    # 设置跨域
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=setting.ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    # 自定义访问日志中间件
+    @app.middleware("http")
+    async def logger_request(request: Request, call_next):
+        # https://stackoverflow.com/questions/60098005/fastapi-starlette-get-client-real-ip
+        logger.info(f"访问记录:{request.method} url:{request.url}\nheaders:{request.headers.get('user-agent')}"
+                    f"\nIP:{request.client.host}")
+        response = await call_next(request)
+        return response
+
+    return app

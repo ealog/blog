@@ -11,13 +11,14 @@
 @desc:
 文章模型
 """
-from models import Base, Column, Integer, String, Text, Boolean
+from models import Base, Column, Integer, Text, String
 
 
 class Post(Base):
     id = Column(Integer, index=True, primary_key=True)
     title = Column(String(100), comment="文章标题")
     body = Column(Text, comment="文章内容")
-    is_show = Column(Boolean, default=True, comment="是否显示")
+    # 文章状态
+    status = Column(Integer, default=1, comment="文章状态,1 置顶显示 2正常显示 3 不显示")
     category_id = Column(Integer, comment="分类")
-    count = Column(Integer, default=0, comment="阅读量")
+    reading = Column(Integer, default=0, comment="阅读量")

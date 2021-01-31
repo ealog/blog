@@ -22,12 +22,12 @@ from core.security import analysis_token
 from db.session import SessionLocal
 
 user_oauth = OAuth2PasswordBearer(
-    tokenUrl="/user/login"
+    tokenUrl="v1/auth/login"
 )
 
 
 # 数据库连接
-def get_db() -> Generator:
+async def get_db() -> Generator:
     try:
         db = SessionLocal()
         yield db
@@ -36,13 +36,12 @@ def get_db() -> Generator:
 
 
 # token检查
-def get_current_user(
-    db: Session = Depends(get_db), token: str = Depends(user_oauth)
-) -> models.User:
+async def get_current_user(
+        db: Session = Depends(get_db), token: str = Depends(user_oauth)
+) -> models.Admin:
     token_data = analysis_token(token)
-    user = db.query(models.User).get(token_data.get("sub"))
+    user = db.query(models.Admin).get(token_data.get("sub"))
     if not user:
         raise HTTPException(status_code=404, detail="用户不存在.")
     return user
-
 

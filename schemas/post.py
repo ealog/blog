@@ -12,31 +12,30 @@
 文章列表
 """
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel
 
 
-class PostBase(BaseModel):
+class Post(BaseModel):
     title: str
 
 
-class PostCreate(PostBase):
+class PostCreate(Post):
     body: str
-    is_show: bool = True
+    status: int = 1
     category_id: int
 
 
-class PostList(PostBase):
+class PostUpdate(PostCreate):
+    reading: int
+
+
+class PostBase(PostCreate):
+    """数据库user表基础模型，并且与model中的user相关联"""
     id: int
+    reading: int
     create_at: datetime
     update_at: datetime
-
-
-class Post(PostCreate):
-    """数据库user表基础模型，并且与model中的user相关联"""
-    id: Optional[int] = None
-    count: int
 
     class Config:
         orm_mode = True

@@ -11,38 +11,26 @@
 @desc:
 分类表
 """
-
-from typing import Optional
+from datetime import datetime
 
 from pydantic import BaseModel
 
 
 # Shared properties
-class CategoryBase(BaseModel):
+class Category(BaseModel):
+    """新增/修改都使用这个模型"""
     name: str
 
 
-# Properties to receive via API on creation
-class CategoryCreate(CategoryBase):
+class CategoryCreate(Category):
     pass
 
 
-# Properties to receive via API on update
-class CategoryUpdate(CategoryBase):
-    name: str
-
-
-# 数据库操作
-
-class CategoryInDBBase(CategoryBase):
+class CategoryBase(Category):
     """数据库user表基础模型，并且与model中的user相关联"""
-    id: Optional[int] = None
+    id: int
+    create_at: datetime
+    update_at: datetime
 
     class Config:
         orm_mode = True
-
-
-# Additional properties to return via API
-class Category(CategoryInDBBase):
-    pass
-
