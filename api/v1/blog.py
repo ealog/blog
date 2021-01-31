@@ -36,6 +36,10 @@ async def get_posts(limit: int = 10, page: int = 1, db: Session = Depends(deps.g
 @blog_router.get("/posts/{post_id}", name="文章详情")
 async def get_post(post_id: int, db: Session = Depends(deps.get_db)):
     # 连接查询返回分类名称
+    post_obj = db.query(models.Post).get(post_id)
+    post_obj.reading += 1
+    db.commit()
+    db.refresh(post_obj)
     post = db.query(models.Post, models.Category).filter(models.Post.category_id == models.Category.id).filter(
         models.Post.id == post_id
     ).first()
