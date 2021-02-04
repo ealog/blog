@@ -22,10 +22,13 @@ from core.config import setting
 def create_app():
     app = FastAPI(title="个人博客API",
               description="""
-              默认账号: admin  默认密码: 123456
-              参考资料
-              - 模型设计参考《Flask Web开发实战_入门、进阶与原理解析（李辉著 ）》BlueBlog项目
-              - 工厂模式和日志代码参考: https://github.com/CoderCharm
+      Blog: https://www.cnblogs.com/zy7y  
+      Gitee: https://gitee.com/zy7y/blog
+      Github: https://github.com/zy7y/blog
+      **默认账号: admin  默认密码: 123456**
+      参考资料
+      - 模型设计参考《Flask Web开发实战_入门、进阶与原理解析（李辉著 ）》BlueBlog项目,
+      - 工厂模式和日志代码参考: https://github.com/CoderCharm
               """)
     app.include_router(router)
 
