@@ -18,4 +18,7 @@ FastAPI Blog后端API
 
 ![](https://gitee.com/zy7y/blog_images/raw/master/img/20210204163912.png)
 
+# 问题
+1. 目前评论相关接口存在问题.
+2. 各接口应该丰富返回数据.
 
